@@ -15,7 +15,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   onDeployCheck,
   getStatusColor,
 }) => {
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string): JSX.Element => {
     switch (status) {
       case 'healthy':
         return <CheckCircle className="w-4 h-4" />;
@@ -28,19 +28,19 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     }
   };
 
-  const getWorstStatus = () => {
+  const getWorstStatus = (): string => {
     if (sloStatuses.length === 0) return 'unknown';
     
     const statusPriority = { breached: 3, degraded: 2, healthy: 1, unknown: 0 };
-    return sloStatuses.reduce((worst, current) => {
+    return sloStatuses.reduce((worst: string, current: SLOStatus) => {
       return statusPriority[current.status as keyof typeof statusPriority] > 
              statusPriority[worst as keyof typeof statusPriority] ? current.status : worst;
     }, 'healthy');
   };
 
-  const getAverageBudget = () => {
+  const getAverageBudget = (): number => {
     if (sloStatuses.length === 0) return 0;
-    const total = sloStatuses.reduce((sum, status) => sum + status.remaining_budget, 0);
+    const total = sloStatuses.reduce((sum: number, status: SLOStatus) => sum + status.remaining_budget, 0);
     return Math.round(total / sloStatuses.length);
   };
 

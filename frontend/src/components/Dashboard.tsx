@@ -16,7 +16,7 @@ const Dashboard: React.FC = () => {
     fetchServices();
   }, []);
 
-  const fetchServices = async () => {
+  const fetchServices = async (): Promise<void> => {
     try {
       const response = await serviceAPI.getServices();
       setServices(response.data);
@@ -40,7 +40,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleDeployCheck = async (service: Service) => {
+  const handleDeployCheck = async (service: Service): Promise<void> => {
     setSelectedService(service);
     setShowDeployCheck(true);
     
@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string): string => {
     switch (status) {
       case 'healthy':
         return 'text-green-600';
@@ -66,7 +66,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const getDeployDecisionColor = (decision: string) => {
+  const getDeployDecisionColor = (decision: string): string => {
     switch (decision) {
       case 'SAFE':
         return 'bg-green-100 text-green-800';
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">Service Reliability Dashboard</h2>
         <button
-          onClick={fetchServices}
+          onClick={() => fetchServices()}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           Refresh
