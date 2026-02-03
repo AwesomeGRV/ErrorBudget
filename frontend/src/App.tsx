@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import Dashboard from './components/Dashboard';
 
-function App() {
+function App(): JSX.Element {
   return (
     <div className="App">
       <header className="bg-gray-900 text-white p-4">

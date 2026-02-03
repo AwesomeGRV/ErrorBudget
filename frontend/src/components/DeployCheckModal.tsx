@@ -15,7 +15,7 @@ const DeployCheckModal: React.FC<DeployCheckModalProps> = ({
   onClose,
   getDecisionColor,
 }) => {
-  const getDecisionIcon = (decision: string) => {
+  const getDecisionIcon = (decision: string): JSX.Element => {
     switch (decision) {
       case 'SAFE':
         return <CheckCircle className="w-6 h-6 text-green-600" />;
@@ -28,7 +28,7 @@ const DeployCheckModal: React.FC<DeployCheckModalProps> = ({
     }
   };
 
-  const formatTime = (timestamp: string) => {
+  const formatTime = (timestamp: string): string => {
     return new Date(timestamp).toLocaleString();
   };
 
