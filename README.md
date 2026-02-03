@@ -11,16 +11,37 @@ Answers three questions instantly:
 
 ## Quick Start
 
+### 🚀 One-Click Setup (Windows)
+
 ```bash
-# Start all services
-docker-compose up -d
+# Install required tools
+scripts\install-tools.bat
 
-# Seed sample data
-./scripts/seed-data.sh
-
-# Access the platform
-open http://localhost:3000
+# Start complete platform
+scripts\start-platform.bat
 ```
+
+### 📋 Manual Setup
+
+1. **Install Tools**:
+   - Docker Desktop: https://www.docker.com/products/docker-desktop/
+   - Go: https://golang.org/dl/
+   - Node.js: https://nodejs.org/ (already installed)
+
+2. **Start Services**:
+   ```bash
+   docker-compose up -d
+   cd backend && go run main.go
+   cd frontend && npm start
+   ./scripts/seed-data.sh
+   ```
+
+3. **Access Platform**:
+   - Dashboard: http://localhost:3000
+   - API: http://localhost:8080/api/v1
+   - Prometheus: http://localhost:9090
+
+📖 **Full Guide**: See [QUICK_START.md](./QUICK_START.md) for detailed instructions
 
 ## Access Points
 
