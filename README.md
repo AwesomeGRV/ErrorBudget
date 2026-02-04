@@ -11,7 +11,7 @@ Answers three questions instantly:
 
 ## Quick Start
 
-### 🚀 One-Click Setup (Windows)
+###  One-Click Setup (Windows)
 
 ```bash
 # Install required tools
@@ -21,7 +21,7 @@ scripts\install-tools.bat
 scripts\start-platform.bat
 ```
 
-### 📋 Manual Setup
+###  Manual Setup
 
 1. **Install Tools**:
    - Docker Desktop: https://www.docker.com/products/docker-desktop/
@@ -41,7 +41,7 @@ scripts\start-platform.bat
    - API: http://localhost:8080/api/v1
    - Prometheus: http://localhost:9090
 
-📖 **Full Guide**: See [QUICK_START.md](./QUICK_START.md) for detailed instructions
+ **Full Guide**: See [QUICK_START.md](./QUICK_START.md) for detailed instructions
 
 ## Access Points
 

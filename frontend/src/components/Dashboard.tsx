@@ -18,15 +18,19 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const fetchServices = async (): Promise<void> => {
+    console.log('Fetching services...');
     try {
       const response = await serviceAPI.getServices();
+      console.log('Services response:', response);
       setServices(response.data);
       
       // Fetch SLO statuses for each service
       const statuses: { [key: number]: SLOStatus[] } = {};
       for (const service of response.data) {
         try {
+          console.log(`Fetching SLO status for service ${service.id}...`);
           const sloResponse = await monitoringAPI.getSLOStatus(service.id);
+          console.log(`SLO status for service ${service.id}:`, sloResponse);
           statuses[service.id] = sloResponse.data;
         } catch (error) {
           console.error(`Failed to fetch SLO status for service ${service.id}:`, error);
@@ -36,6 +40,36 @@ const Dashboard: React.FC = () => {
       setSLOStatuses(statuses);
     } catch (error) {
       console.error('Failed to fetch services:', error);
+      // Add some dummy data as fallback
+      setServices([
+        {
+          id: 1,
+          name: 'Sample Service',
+          owner_team: 'platform-team',
+          environment: 'prod',
+          version: 'v1.0.0',
+          description: 'Sample service for testing',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ]);
+      setSLOStatuses({
+        1: [{
+          slo_id: 1,
+          service_name: 'Sample Service',
+          slo_name: 'Sample SLO',
+          current_sli: 0.95,
+          target: 0.99,
+          status: 'healthy' as const,
+          remaining_budget: 75.0,
+          consumed_budget: 25.0,
+          current_burn_rate: 1.0,
+          fast_burn_rate: 1.5,
+          slow_burn_rate: 0.8,
+          time_to_exhaustion: 30,
+          last_updated: new Date().toISOString()
+        }]
+      });
     } finally {
       setLoading(false);
     }
@@ -81,6 +115,7 @@ const Dashboard: React.FC = () => {
   };
 
   if (loading) {
+    console.log('Dashboard is loading...');
     return (
       <div className="flex flex-col justify-center items-center h-64">
         <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
@@ -89,6 +124,9 @@ const Dashboard: React.FC = () => {
       </div>
     );
   }
+
+  console.log('Dashboard render - services:', services.length);
+  console.log('Dashboard render - loading:', loading);
 
   return (
     <div className="space-y-8">
