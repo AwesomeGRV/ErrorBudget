@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Budget Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Error Budget Dashboard</h1>
+                    <p class="text-gray-600 mt-1">Monitor service reliability and error budgets</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-sm text-gray-600">Live</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="text-sm font-medium text-gray-600">Total Services</div>
+                <div class="text-2xl font-bold text-gray-900" id="total-services">4</div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="text-sm font-medium text-gray-600">Healthy</div>
+                <div class="text-2xl font-bold text-green-600" id="healthy-services">2</div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="text-sm font-medium text-gray-600">Warning</div>
+                <div class="text-2xl font-bold text-yellow-600" id="warning-services">1</div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="text-sm font-medium text-gray-600">Critical</div>
+                <div class="text-2xl font-bold text-red-600" id="critical-services">1</div>
+            </div>
+        </div>
+
+        <!-- Service Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="services-container">
+            <!-- Services will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        // Mock service data
+        const services = [
+            {
+                id: 1,
+                name: 'Payment Service',
+                team: 'Fintech',
+                environment: 'Production',
+                errorBudget: 85,
+                status: 'healthy',
+                sli: 99.9,
+                slo: 99.5
+            },
+            {
+                id: 2,
+                name: 'User Service',
+                team: 'Platform',
+                environment: 'Production',
+                errorBudget: 45,
+                status: 'warning',
+                sli: 99.2,
+                slo: 99.5
+            },
+            {
+                id: 3,
+                name: 'Notification Service',
+                team: 'Platform',
+                environment: 'Production',
+                errorBudget: 15,
+                status: 'critical',
+                sli: 98.5,
+                slo: 99.0
+            },
+            {
+                id: 4,
+                name: 'API Gateway',
+                team: 'Infrastructure',
+                environment: 'Production',
+                errorBudget: 92,
+                status: 'healthy',
+                sli: 99.95,
+                slo: 99.9
+            }
+        ];
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'healthy': return 'text-green-600 bg-green-100';
+                case 'warning': return 'text-yellow-600 bg-yellow-100';
+                case 'critical': return 'text-red-600 bg-red-100';
+                default: return 'text-gray-600 bg-gray-100';
+            }
+        }
+
+        function getErrorBudgetColor(budget) {
+            if (budget >= 70) return 'bg-green-500';
+            if (budget >= 30) return 'bg-yellow-500';
+            return 'bg-red-500';
+        }
+
+        function createServiceCard(service) {
+            return `
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <!-- Card Header -->
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900">${service.name}</h3>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(service.status)}">
+                                ${service.status.toUpperCase()}
+                            </span>
+                        </div>
+                        <div class="space-y-2 text-sm text-gray-600">
+                            <div>Team: ${service.team}</div>
+                            <div>Environment: ${service.environment}</div>
+                        </div>
+                    </div>
+
+                    <!-- Error Budget Section -->
+                    <div class="p-6 bg-gray-50">
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-gray-700">Error Budget</span>
+                                <span class="text-lg font-bold text-gray-900">${service.errorBudget}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="h-3 rounded-full ${getErrorBudgetColor(service.errorBudget)}" 
+                                     style="width: ${service.errorBudget}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-gray-600">SLI:</span>
+                                <span class="ml-2 font-medium">${service.sli}%</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">SLO:</span>
+                                <span class="ml-2 font-medium">${service.slo}%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="p-6 bg-white border-t border-gray-200">
+                        <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors" 
+                                onclick="checkDeploySafety('${service.name}')">
+                            Check Deploy Safety
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkDeploySafety(serviceName) {
+            const decision = Math.random() > 0.7 ? 'BLOCKED' : Math.random() > 0.4 ? 'RISKY' : 'SAFE';
+            const reason = decision === 'SAFE' ? 'Error budget is healthy' : 
+                          decision === 'RISKY' ? 'Error budget is low' : 
+                          'Error budget is critically low';
+            
+            alert(`Deploy Safety Check for ${serviceName}\n\nDecision: ${decision}\nReason: ${reason}`);
+        }
+
+        function updateSummary() {
+            const healthy = services.filter(s => s.status === 'healthy').length;
+            const warning = services.filter(s => s.status === 'warning').length;
+            const critical = services.filter(s => s.status === 'critical').length;
+            
+            document.getElementById('total-services').textContent = services.length;
+            document.getElementById('healthy-services').textContent = healthy;
+            document.getElementById('warning-services').textContent = warning;
+            document.getElementById('critical-services').textContent = critical;
+        }
+
+        function renderServices() {
+            const container = document.getElementById('services-container');
+            container.innerHTML = services.map(service => createServiceCard(service)).join('');
+            updateSummary();
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            renderServices();
+        });
+    </script>
+</body>
+</html>
